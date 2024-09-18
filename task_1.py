@@ -1,5 +1,6 @@
 import numpy as np
 
+# Исходные данные
 data = np.array([[-1, 0, 2, 3], [0, 1, 9, 28]])
 
 print("Исходный массив:")
@@ -11,6 +12,7 @@ f_values = data[1]
 
 n = len(x_values)
 
+# Построение матрицы системы уравнений
 matrix = np.zeros((n, n + 1), dtype=int)
 
 for i in range(n):
@@ -18,33 +20,42 @@ for i in range(n):
         matrix[i, j] = x_values[i] ** (n - j - 1)
     matrix[i, -1] = f_values[i]
 
+# Вывод матрицы системы уравнений
+print("\nМатрица системы уравнений:")
+for row in matrix:
+    print(' '.join(f"{num:>4}" for num in row))
+
 # Решение СЛАУ
 A = matrix[:, :-1]  # Матрица коэффициентов
 b = matrix[:, -1]   # Вектор свободных членов
 
-coefficients = np.linalg.solve(A, b)
-a0, a1, a2, a3 = coefficients
+try:
+    coefficients = np.linalg.solve(A, b)
+    a0, a1, a2, a3 = coefficients
 
-print("\nКоэффициенты a:")
-for i, coeff in enumerate(coefficients):
-    print(f"a{i} = {coeff:.2f}")
+    print("\nКоэффициенты a:")
+    for i, coeff in enumerate(coefficients):
+        print(f"a{i} = {coeff:.2f}")
 
-def p3(x):
-    return a3 * x**3 + a2 * x**2 + a1 * x + a0
+    def p3(x):
+        return a3 * x**3 + a2 * x**2 + a1 * x + a0
 
-new_matrix = np.zeros((2, 2*n - 1))
+    new_matrix = np.zeros((2, 2 * n - 1))
 
-for i in range(n):
-    new_matrix[0, 2*i] = x_values[i]
-    if i < n - 1:
-        new_matrix[0, 2*i + 1] = (x_values[i] + x_values[i + 1]) / 2
+    for i in range(n):
+        new_matrix[0, 2 * i] = x_values[i]
+        if i < n - 1:
+            new_matrix[0, 2 * i + 1] = (x_values[i] + x_values[i + 1]) / 2
 
-for i in range(n):
-    new_matrix[1, 2*i] = f_values[i]
-    if i < n - 1:
-        new_matrix[1, 2*i + 1] = p3((x_values[i] + x_values[i + 1]) / 2)
+    for i in range(n):
+        new_matrix[1, 2 * i] = f_values[i]
+        if i < n - 1:
+            new_matrix[1, 2 * i + 1] = p3((x_values[i] + x_values[i + 1]) / 2)
 
-print("\nРезультирующая матрица:")
-for row in new_matrix:
-    formatted_row = ' '.join(f"{num:>7.3f}" for num in row)
-    print(formatted_row)
+    print("\nРезультирующая матрица:")
+    for row in new_matrix:
+        formatted_row = ' '.join(f"{num:>7.3f}" for num in row)
+        print(formatted_row)
+
+except np.linalg.LinAlgError:
+    print("Система уравнений не имеет единственного решения.")
