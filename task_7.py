@@ -65,20 +65,22 @@ def print_results(vx, vy):
 
         print()
 
-    # Find maximum deviation and its corresponding x
+    # Find maximum deviation, its corresponding x, and index
     max_deviation = 0
     max_x = 0
+    max_index = 0
     for i in range(len(vy)):
         deviation = abs(vy[i] - check_y(vx[i]))
         if deviation > max_deviation:
             max_deviation = deviation
             max_x = vx[i]
+            max_index = i
 
-    print(f"Максимальное отклонение: {max_deviation:.5f} в точке x = {max_x:.5f}")
+    print(f"Максимальное отклонение: {max_deviation:.5f} в точке x = {max_x:.5f} (индекс {max_index})")
 
 
 def solve():
-    n = 10000
+    n = 20000
     l, r = 0.0, T
     h = (r - l) / n
 
