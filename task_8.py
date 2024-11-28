@@ -1,4 +1,4 @@
-eimport math
+import math
 from itertools import product
 
 V = 22.0
